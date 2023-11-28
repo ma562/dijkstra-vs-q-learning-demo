@@ -675,51 +675,51 @@ for (let i = 1; i < map.length - 1; i++) {
 }
 
 
-let pathLengthMatrix = createPathMatrix(map);
-for (let i = 0; i < clearPaths.length; i++) {
-  let local_max = 0;
-  // for (let j = i + 1; j < clearPaths.length; j++) {
-  for (let j = 0; j < clearPaths.length; j++) {
-    if(i != j) {
-      let start = clearPaths[i];
-      let end = clearPaths[j];
+// let pathLengthMatrix = createPathMatrix(map);
+// for (let i = 0; i < clearPaths.length; i++) {
+//   let local_max = 0;
+//   // for (let j = i + 1; j < clearPaths.length; j++) {
+//   for (let j = 0; j < clearPaths.length; j++) {
+//     if(i != j) {
+//       let start = clearPaths[i];
+//       let end = clearPaths[j];
 
-      my_matrix = read_write_values(map)
+//       my_matrix = read_write_values(map)
 
-      fastestTimes(my_matrix, start[0], start[1], end[0], end[1], max_rows, max_col)
-      if(max_rows.length > max_distance) {
-        max_distance = max_rows.length;
-      }
-      if(max_rows.length > local_max) {
-        local_max = max_rows.length;
-        pathLengthMatrix[start[0]][[start[1]]] = local_max;
-      }
-      count++;
-    }
-  }
-}
+//       fastestTimes(my_matrix, start[0], start[1], end[0], end[1], max_rows, max_col)
+//       if(max_rows.length > max_distance) {
+//         max_distance = max_rows.length;
+//       }
+//       if(max_rows.length > local_max) {
+//         local_max = max_rows.length;
+//         pathLengthMatrix[start[0]][[start[1]]] = local_max;
+//       }
+//       count++;
+//     }
+//   }
+// }
 
-console.log("this is me path length matrix");
-console.log(pathLengthMatrix);
-console.log("max distance is ");
-console.log(max_distance);
+// console.log("this is me path length matrix");
+// console.log(pathLengthMatrix);
+// console.log("max distance is ");
+// console.log(max_distance);
 
-TIMEOUT_CUTOFF = max_distance * 7;    //IF WE HAVE RUN 3 TIMES THE MAX DISTANCE THEN TIMEOUT
+TIMEOUT_CUTOFF = 238; //max_distance * 6;    //IF WE HAVE RUN 6 TIMES THE MAX DISTANCE THEN TIMEOUT
 console.log("our timeout cutoff is ")
 console.log(TIMEOUT_CUTOFF);
-console.log(pathLengthMatrix);
+// console.log(pathLengthMatrix);
 
 //RL PARAMETERS -----------------------------------------------------------------------------
-const KEEP_DISTANCE_EXIT_ATTEMPT = max_distance  //maintain distance from cat AND get closer to exit
-const KEEP_DISTANCE = max_distance / 2  //maintain distance from cat AND get further/maintain distance from exit
-const ESCAPE_ATTEMPT = max_distance   //mouse gets closer to cat, exit gets closer to mouse, exit is closer to mouse than cat is to mouse
-const CAUGHT = -max_distance * 3
-const ESCAPE = max_distance * 3
-let epsilon = 0
-let EPS_DECAY = 0.9998   //fast decay   //0.9998;
-const LEARNING_RATE = 0.1
-const DISCOUNT = 0.95;
-let EPISODES = 0;0
+// const KEEP_DISTANCE_EXIT_ATTEMPT = max_distance  //maintain distance from cat AND get closer to exit
+// const KEEP_DISTANCE = max_distance / 2  //maintain distance from cat AND get further/maintain distance from exit
+// const ESCAPE_ATTEMPT = max_distance   //mouse gets closer to cat, exit gets closer to mouse, exit is closer to mouse than cat is to mouse
+// const CAUGHT = -max_distance * 3
+// const ESCAPE = max_distance * 3
+// let epsilon = 0
+// let EPS_DECAY = 0.9998   //fast decay   //0.9998;
+// const LEARNING_RATE = 0.1
+// const DISCOUNT = 0.95;
+// let EPISODES = 0;0
 let TESTING_EPISODES = 0;
 //-----------------------------------------------------------------------------
 
@@ -1211,14 +1211,14 @@ function animate() {
   })
 
   //final goalkeeping to check if player goes out of bounds
-  if(player.future_row < 0 || player.future_row > map.length - 3 || 
-    player.future_col < 0 || player.future_col > map.length - 3 || 
-    pathLengthMatrix[player.future_row][player.future_col] === -2) {
-    player.blockage = true;
-    // console.log("blocked our future rows and columns");
-    // console.log(player.future_row);
-    // console.log(player.future_col);
-  }
+  // if(player.future_row < 0 || player.future_row > map.length - 3 || 
+  //   player.future_col < 0 || player.future_col > map.length - 3 || 
+  //   pathLengthMatrix[player.future_row][player.future_col] === -2) {
+  //   player.blockage = true;
+  //   // console.log("blocked our future rows and columns");
+  //   // console.log(player.future_row);
+  //   // console.log(player.future_col);
+  // }
   // else {
   //   console.log("NOT blocked our future rows and columns");
   //   console.log(player.future_row);
