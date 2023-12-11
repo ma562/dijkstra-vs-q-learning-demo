@@ -30,6 +30,8 @@ let total_caught_paths = 0;
 let total_path_length = []
 // let success_rate = [];
 let path_count = 0;
+let CAT_SCORE = 0;
+let MOUSE_SCORE = 0;
 
 // Declare numCats as a global variable
 window.numCats = numCats;
@@ -73,6 +75,24 @@ function get_continuous_Y(position_y) {
 }
 
 let map = mapCollection["map1"];
+
+function positionScoreboard() {
+    const scoreboard = document.getElementById('scoreboard');
+    scoreboard.style.top = '20px';
+    scoreboard.style.right = `20px`;
+}
+
+window.addEventListener('resize', positionScoreboard);
+
+function updateScoreboard(cat_score, mouse_score) {
+    const scoreboard = document.getElementById('scoreboard');
+    scoreboard.innerHTML = `Dijkstra Cat Catches: ${cat_score} | Q1 Mouse Escapes: ${mouse_score}`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    updateScoreboard(CAT_SCORE, MOUSE_SCORE); // Initialize scoreboard content
+    positionScoreboard(); // Position scoreboard
+});
 
 
 class PriorityQueue {
@@ -1321,9 +1341,11 @@ function animate() {
       if(restart2) {
         total_escape_paths += path_count;
         testing_success += 1;
+        MOUSE_SCORE += 1;
       }
       else {
         total_caught_paths += path_count;
+        CAT_SCORE += 1;
       }
 
       TESTING_EPISODES += 1
@@ -1336,6 +1358,7 @@ function animate() {
       player.position.x = get_continuous_Y(positions.mousePosition.col)    
       myCats[0].position.y = get_continuous_X(positions.catPosition.row) 
       myCats[0].position.x = get_continuous_Y(positions.catPosition.col) 
+      updateScoreboard(CAT_SCORE, MOUSE_SCORE)
 
       if(TESTING_EPISODES % 200 === 0) {
 
