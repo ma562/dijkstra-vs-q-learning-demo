@@ -84,13 +84,13 @@ function positionScoreboard() {
 
 window.addEventListener('resize', positionScoreboard);
 
-function updateScoreboard(cat_score, mouse_score) {
+function updateScoreboard(cat_score, mouse_score, path) {
     const scoreboard = document.getElementById('scoreboard');
-    scoreboard.innerHTML = `Dijkstra Cat Catches: ${cat_score} | Q1 Mouse Escapes: ${mouse_score}`;
+    scoreboard.innerHTML = `Dijkstra Cat Catches: ${cat_score} | Q1 Mouse Escapes: ${mouse_score} | Steps taken: ${path}`;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    updateScoreboard(CAT_SCORE, MOUSE_SCORE); // Initialize scoreboard content
+    updateScoreboard(CAT_SCORE, MOUSE_SCORE, 0); // Initialize scoreboard content
     positionScoreboard(); // Position scoreboard
 });
 
@@ -980,7 +980,6 @@ function animate() {
         //if we are not testing AND epsilon is less than random then take best action.
         if (TESTING) {
           action = getBestAction(Qtable, state_Index);
-          path_count += 1;    //counting number of paths mouse taken
         }
 
         if (TESTING && isOscillating(stateHistory, maxHistory)) {
@@ -1108,30 +1107,14 @@ function animate() {
       circle: player,
       rectangle: boundary
     })) {
-      // if(!player.movement_in_progress) {
-      //   player.blockage = true;
-      //   console.log("player blocked");
-      // }
       player.blockage = true;
     }
   })
 
-  //final goalkeeping to check if player goes out of bounds
-  // if(player.future_row < 0 || player.future_row > map.length - 3 || 
-  //   player.future_col < 0 || player.future_col > map.length - 3 || 
-  //   pathLengthMatrix[player.future_row][player.future_col] === -2) {
-  //   player.blockage = true;
-  //   // console.log("blocked our future rows and columns");
-  //   // console.log(player.future_row);
-  //   // console.log(player.future_col);
-  // }
-  // else {
-  //   console.log("NOT blocked our future rows and columns");
-  //   console.log(player.future_row);
-  //   console.log(player.future_col);
-  // }
+  
 
   if(animate_iteration % UPDATE_FREQUENCY === 0) {
+
     //player didn't get blocked and the mouse didn't escape yet
     if(!player.blockage && !restart2 && !restart) {
     direction_row = get_continuous_X(player.future_row) - player.position.y;
@@ -1198,6 +1181,8 @@ function animate() {
         else if(col_vector) {
           player.position.x = go_to_col;
         }
+        path_count += 1;    //counting number of paths mouse taken
+        updateScoreboard(CAT_SCORE, MOUSE_SCORE, path_count);
         player.movement_in_progress = false;
       }
     }
@@ -1358,11 +1343,11 @@ function animate() {
       player.position.x = get_continuous_Y(positions.mousePosition.col)    
       myCats[0].position.y = get_continuous_X(positions.catPosition.row) 
       myCats[0].position.x = get_continuous_Y(positions.catPosition.col) 
-      updateScoreboard(CAT_SCORE, MOUSE_SCORE)
+      updateScoreboard(CAT_SCORE, MOUSE_SCORE, path_count);
 
       if(TESTING_EPISODES % 200 === 0) {
 
-        total_path_length.push((total_escape_paths + total_caught_paths) / 200);
+        //total_path_length.push((total_escape_paths + total_caught_paths) / 200);
 
         testing_success = 0;
       }
